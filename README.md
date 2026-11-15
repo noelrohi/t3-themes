@@ -38,3 +38,12 @@ Source art `sources/giorno/original.png` stays local. To re-dither (args: cols, 
 .venv/bin/python sources/giorno/dither.py sources/giorno/original.png sources/giorno 400 10 95 0.44
 ```
 
+## Doom
+
+Doctor Doom on Whirl's base, built like Giorno. The art is mirrored so Doom sits on the right facing the chat, and widened to 16:9 with black on the left. The black background connected to the edges is cut out to canvas, so only Doom is dotted.
+
+Source art `sources/doom/original.png` stays local. To re-dither:
+
+```sh
+.venv/bin/python sources/doom/dither.py sources/doom/original.png sources/doom 400 10 95 0.6
+```
