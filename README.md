@@ -4,9 +4,10 @@ Custom themes for T3 Code.
 
 | Folder | What's in it |
 | --- | --- |
-| `themes/` | Installed themes. `scripts/install.sh` copies these into `~/.t3/userdata/themes/`. |
+| `bases/` | Palettes a theme builds on: Whirl (by saltjsx) and Iron. |
+| `themes/` | Built themes, written by `scripts/build.sh`; `scripts/install.sh` copies them into `~/.t3/userdata/themes/`. |
 | `archive/` | Retired themes, kept for reference: Steel Ball Run and the Iron Dots Glass / Floor / Spotlight variants. Not installed. |
-| `sources/` | Source art and the scripts that build each theme's background. |
+| `sources/` | Per theme: `theme.json` (name, base, overrides), `combo.py` (CSS), and the art. |
 
 ## Iron Dots
 
@@ -15,7 +16,7 @@ Dotted Iron Man background (art: Art Roman, 2020), 256×144 dot grid with a 12-c
 - Dark appearance: **Spotlight** — light pool on the face, rest near-black.
 - Light appearance: **Floor** — art fully lit, dark band rising from the bottom.
 
-To change it, edit `sources/iron-dots/combo.py`, run `scripts/build.sh`, and re-select the theme in T3. `AGENTS.md` has the full loop, the screens to check, and the selectors that work.
+To change it, edit `sources/iron-dots/combo.py` (CSS) or `sources/iron-dots/theme.json` (palette: `"base"` picks a file in `bases/`), run `scripts/build.sh`, and re-select the theme in T3. `AGENTS.md` has the full loop, the screens to check, and the selectors that work.
 
 `sources/iron-dots/original.png` (the source art) is not in the repo. To re-dither from it, put a copy there, then:
 
@@ -36,3 +37,4 @@ Source art `sources/giorno/original.png` stays local. To re-dither (args: cols, 
 ```sh
 .venv/bin/python sources/giorno/dither.py sources/giorno/original.png sources/giorno 400 10 95 0.44
 ```
+

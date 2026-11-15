@@ -1,11 +1,19 @@
 # t3-themes
 
-Custom T3 Code themes. Each theme is `themes/<id>.json`; T3 loads them from `~/.t3/userdata/themes/`.
+Custom T3 Code themes. T3 loads `~/.t3/userdata/themes/<id>.json`; `themes/<id>.json` is the built copy. Don't edit `themes/` by hand; `scripts/build.sh` overwrites it.
+
+Each theme is a base palette plus art:
+
+| File | Holds |
+| --- | --- |
+| `bases/<base>.json` | A palette: `canvas`, `accent`, the 58 color roles, optionally a light variant. |
+| `sources/<id>/theme.json` | `name`, `base`, `light` (`"dark"` reuses the dark roles, `"base"` uses the base's light variant), and role overrides in `colors` / `variants.light`. |
+| `sources/<id>/combo.py` | The CSS. It gets the merged theme as JSON in `argv[2]`; take canvas and surface colors from there, never hard-code them, so a base swap recolors the art's overlays. |
 
 ## Changing a theme
 
-1. Edit the source: CSS lives in `sources/<id>/combo.py`, color roles in `themes/<id>.json`.
-2. Run `scripts/build.sh`. It writes the CSS into the theme JSON, checks T3's 20,000-character limit, and installs.
+1. Edit the source: palette in `bases/` or `sources/<id>/theme.json`, CSS in `sources/<id>/combo.py`. To swap a theme's palette, change `base` in its `theme.json`.
+2. Run `scripts/build.sh`. It merges base and overrides, runs `combo.py`, checks T3's 20,000-character limit, writes `themes/<id>.json`, and installs.
 3. Apply it with `t3_theme_set` passing only `themeId`. The files carry the CSS, so the tool call stays small; a full `theme` payload drags ~11k characters of image data through the call and risks corrupting it.
 4. Run `scripts/shot.sh` and look at the image before replying. Done when every screen in **Screens to check** looks right.
 
@@ -36,4 +44,5 @@ The last two match Tailwind class strings, which change between T3 releases. Aft
 ## Gotchas
 
 - An image used in two places is embedded once as a `:root` custom property (`--im-pic`); embedding it twice breaks the 20,000-character limit.
+- Dithered art keeps its background transparent (Giorno's `dither.py` saves the background index as transparent), so the canvas from the base shows through.
 - `sources/*/original.png` is the full-resolution source art and stays local (gitignored). `build.sh` needs only the committed `dith.webp`; re-dithering with `dither.py` needs the original.

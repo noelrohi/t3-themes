@@ -1,14 +1,16 @@
 import base64,sys,json
 o=sys.argv[1]
+c=json.load(open(sys.argv[2]))["colors"]
+K=c["canvas"]; C=" ".join(str(int(K[i:i+2],16)) for i in (1,3,5))  # canvas as hex and as "r g b"
 w=base64.b64encode(open(f"{o}/dith.webp","rb").read()).decode()
 svg=("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='144' viewBox='0 0 256 144' preserveAspectRatio='none'%3E"
  "%3Cdefs%3E%3Cpattern id='p' width='1' height='1' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='.5' cy='.5' r='.36' fill='%23fff'/%3E%3C/pattern%3E%3C/defs%3E"
  "%3Crect width='256' height='144' fill='%23000'/%3E%3Crect width='256' height='144' fill='url(%23p)'/%3E%3C/svg%3E")
 ROOT=f':root{{--im-dots:url("{svg}");--im-pic:url("data:image/webp;base64,{w}");}}\n'
-IMG='var(--im-dots) center/cover no-repeat fixed,var(--im-pic) center/cover no-repeat fixed,#07060c'
-LANE='linear-gradient(90deg,transparent,rgb(7 6 12/var(--im-lane,.8)) 16% 84%,transparent)'
-FLOOR='linear-gradient(to top,rgb(7 6 12/.97) 0,rgb(7 6 12/.9) 22%,rgb(7 6 12/0) 58%) fixed'
-SPOT='radial-gradient(ellipse 30% 46% at 50% 38%,rgb(7 6 12/.04) 0,rgb(7 6 12/.4) 55%,rgb(7 6 12/.88) 100%) fixed'
+IMG='var(--im-dots) center/cover no-repeat fixed,var(--im-pic) center/cover no-repeat fixed,'+K
+LANE=f'linear-gradient(90deg,transparent,rgb({C}/var(--im-lane,.8)) 16% 84%,transparent)'
+FLOOR=f'linear-gradient(to top,rgb({C}/.97) 0,rgb({C}/.9) 22%,rgb({C}/0) 58%) fixed'
+SPOT=f'radial-gradient(ellipse 30% 46% at 50% 38%,rgb({C}/.04) 0,rgb({C}/.4) 55%,rgb({C}/.88) 100%) fixed'
 def sel(p,parts): return ",".join(p+x for x in parts)
 COLS=['[data-chat-column]','[data-workspace-area="home"]','[data-settings-page-scroll]']
 SB=['[data-slot="sidebar-inner"]']
@@ -18,7 +20,7 @@ def bg(p,parts,layers,n):
 D='.dark '; L=':root:not(.dark) '
 css=ROOT
 css+=bg(D,COLS,[LANE,SPOT],2)+bg(D,SB,[SPOT],1)
-css+=bg(L,COLS,[LANE,FLOOR],2)+bg(L,SB,[FLOOR,'linear-gradient(rgb(7 6 12/.55),rgb(7 6 12/.55)) fixed'],2)
+css+=bg(L,COLS,[LANE,FLOOR],2)+bg(L,SB,[FLOOR,f'linear-gradient(rgb({C}/.55),rgb({C}/.55)) fixed'],2)
 css+=('[data-chat-column]:not(:has([data-timeline-row-kind])),[data-workspace-area="home"]{--im-lane:0;}\n'
  '[data-chat-column] *,[data-workspace-area="home"] *,[data-settings-page-scroll] *,[data-slot="sidebar-inner"] *{image-rendering:auto;}\n'
  '[data-chat-header],[data-chat-column] [data-workspace-area="conversation"],[data-chat-column] [data-workspace-area="home"]{background:transparent!important;}\n'
