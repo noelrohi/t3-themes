@@ -1,8 +1,8 @@
 #!/bin/sh
 # Search T3 Code's bundled UI code for a string (an attribute, class, or visible text).
-# Usage: scripts/find-selector.sh 'data-chat-header' [chars of context, default 300]
+# Usage: scripts/find-selector.sh 'data-chat-header' [chars of context, default 200, max 255]
 set -eu
-pattern="$1"; ctx="${2:-300}"
+pattern="$1"; ctx="${2:-200}"
 app="/Applications/T3 Code (Nightly).app"
 version="$(defaults read "$app/Contents/Info" CFBundleShortVersionString)"
 cache="${TMPDIR:-/tmp}/t3-asar/$version"
