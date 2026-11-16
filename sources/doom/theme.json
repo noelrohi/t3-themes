@@ -1,6 +1,6 @@
 {
   "name": "Doom",
-  "base": "whirl",
+  "base": "t3code",
   "appearance": "dark",
   "light": "dark",
   "colors": {}
